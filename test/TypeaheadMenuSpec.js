@@ -14,6 +14,7 @@ const TypeaheadContext = React.createClass({
     onActiveItemChange: PropTypes.func.isRequired,
     onInitialItemChange: PropTypes.func.isRequired,
     onMenuItemClick: PropTypes.func.isRequired,
+    sortByStartWith: PropTypes.bool,
   },
 
   getChildContext() {
@@ -22,6 +23,7 @@ const TypeaheadContext = React.createClass({
       onActiveItemChange: noop,
       onInitialItemChange: noop,
       onMenuItemClick: noop,
+      sortByStartWith: true,
     };
   },
 
