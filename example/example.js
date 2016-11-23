@@ -38,7 +38,7 @@ const Example = React.createClass({
       preSelected: false,
       selected: [],
       text: '',
-      sortByStartWith: true
+      sortByStartWith: true,
     };
   },
 

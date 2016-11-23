@@ -144,7 +144,7 @@ const Typeahead = React.createClass({
       multiple: false,
       paginate: true,
       selected: [],
-      sortByStartWith: true
+      sortByStartWith: true,
     };
   },
 
@@ -260,8 +260,8 @@ const Typeahead = React.createClass({
     let {sortByStartWith} = this.props;
 
     if (sortByStartWith) {
-      const startsWithMatcher = new RegExp("^" + text, "i");
-      const containsMatcher = new RegExp(text, "i");
+      const startsWithMatcher = new RegExp('^' + text, 'i');
+      const containsMatcher = new RegExp(text, 'i');
 
       const textChecker = (option, checker) => {
         if (isFunction(labelKey) && checker.test(labelKey(option))) {
@@ -273,10 +273,10 @@ const Typeahead = React.createClass({
         }
 
         return false;
-      }
+      };
 
-      const checkStartWith = (option) => textChecker(option, startsWithMatcher);
-      const checkContainText = (option) => textChecker(option, containsMatcher);
+      const checkStartWith = option => textChecker(option, startsWithMatcher);
+      const checkContainText = option => textChecker(option, containsMatcher);
 
       const startsWith = results.filter(checkStartWith);
       const contains = results.filter(checkContainText);
