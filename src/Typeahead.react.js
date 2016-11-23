@@ -1,7 +1,7 @@
 'use strict';
 
 import cx from 'classnames';
-import {find, isEqual, noop} from 'lodash';
+import {find, isEqual, noop, isFunction, uniq} from 'lodash';
 import onClickOutside from 'react-onclickoutside';
 import React, {PropTypes} from 'react';
 
@@ -146,6 +146,11 @@ const Typeahead = React.createClass({
      * Propagate <RETURN> event to parent form.
      */
     submitFormOnEnter: PropTypes.bool,
+
+    /**
+     * whether or not to sort the results by start character
+     */
+    sortByStartWith: PropTypes.bool,
   },
 
   getDefaultProps() {
@@ -180,6 +185,7 @@ const Typeahead = React.createClass({
     onActiveItemChange: PropTypes.func.isRequired,
     onInitialItemChange: PropTypes.func.isRequired,
     onMenuItemClick: PropTypes.func.isRequired,
+    sortByStartWith: PropTypes.bool,
   },
 
   getChildContext() {
@@ -188,6 +194,7 @@ const Typeahead = React.createClass({
       onActiveItemChange: this._handleActiveItemChange,
       onInitialItemChange: this._handleInitialItemChange,
       onMenuItemClick: this._handleAddOption,
+      sortByStartWith: true,
     };
   },
 
@@ -308,7 +315,35 @@ const Typeahead = React.createClass({
       ) :
       option => filterBy(option, text);
 
-    return options.filter(callback);
+    let results = options.filter(callback);
+    let {sortByStartWith} = this.props;
+
+    if (sortByStartWith) {
+      const startsWithMatcher = new RegExp('^' + text, 'i');
+      const containsMatcher = new RegExp(text, 'i');
+
+      const textChecker = (option, checker) => {
+        if (isFunction(labelKey) && checker.test(labelKey(option))) {
+          return true;
+        }
+
+        if (typeof labelKey === 'string') {
+          return checker.test(option[labelKey]);
+        }
+
+        return false;
+      };
+
+      const checkStartWith = option => textChecker(option, startsWithMatcher);
+      const checkContainText = option => textChecker(option, containsMatcher);
+
+      const startsWith = results.filter(checkStartWith);
+      const contains = results.filter(checkContainText);
+
+      results = uniq(startsWith.concat(contains));
+    }
+
+    return results;
   },
 
   blur() {
