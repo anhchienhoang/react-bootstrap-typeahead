@@ -38,6 +38,7 @@ const Example = React.createClass({
       preSelected: false,
       selected: [],
       text: '',
+      sortByStartWith: true
     };
   },
 
@@ -58,6 +59,7 @@ const Example = React.createClass({
       preSelected,
       selected,
       text,
+      sortByStartWith,
     } = this.state;
 
     const props = {
@@ -69,6 +71,7 @@ const Example = React.createClass({
       minLength,
       multiple,
       selected,
+      sortByStartWith,
     };
 
     if (customMenuItemChildren) {
@@ -173,6 +176,12 @@ const Example = React.createClass({
                 name="customToken"
                 onChange={this._handleChange}>
                 Customize tokens (multiple selections only)
+              </Checkbox>
+              <Checkbox
+                  checked={sortByStartWith}
+                  name="sortByStartWith"
+                  onChange={this._handleChange}>
+                Sort the results by start character
               </Checkbox>
             </div>
           </ExampleSection>
@@ -279,6 +288,9 @@ const Example = React.createClass({
         !checked && newSelection.splice(1, newSelection.length);
         newState.selected = newSelection || [];
         newState.customToken = false;
+        break;
+      case 'sortByStartWith':
+        newState.sortByStartWith = checked ? true : false;
         break;
     }
 
