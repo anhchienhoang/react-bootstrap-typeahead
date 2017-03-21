@@ -177,6 +177,7 @@ const Typeahead = React.createClass({
       paginate: true,
       selected: [],
       submitFormOnEnter: false,
+      sortByStartWith: true,
     };
   },
 
